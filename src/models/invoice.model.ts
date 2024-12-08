@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { LineItem } from "./lineItem.model";
-import sequelize from "../config/database";
+import sequelize from "../config/database.config";
 import User from "./user.model";
 import { Client } from "./client.model";
 
@@ -41,7 +41,7 @@ Invoice.init(
     },
     reciver_id: {
       type: DataTypes.INTEGER.UNSIGNED,
-      references:{
+      references: {
         model: Client,
         key: "id",
       },

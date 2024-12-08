@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../config/database.config";
 import { LineItem } from "./lineItem.model";
 import { Product } from "./product.model";
 

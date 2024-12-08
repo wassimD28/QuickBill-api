@@ -1,9 +1,10 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../config/database.config";
 
 class User extends Model {
   public id!: number;
   public name!: string;
+  public username!: string;
   public email!: string;
   public password!: string;
   public roles!: string[]; // Array of roles
@@ -11,7 +12,7 @@ class User extends Model {
   public phone!: string;
   public country!: string;
   public createdAt!: Date;
-  public updatedAt!: Date; 
+  public updatedAt!: Date;
 }
 
 User.init(
@@ -23,7 +24,12 @@ User.init(
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    username: {
+      type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -43,7 +49,7 @@ User.init(
       defaultValue: ["USER"], // Default role
       validate: {
         isValidRole(value: string[]) {
-          const validRoles = ["ADMIN", "USER" ];
+          const validRoles = ["ADMIN", "USER"];
           value.forEach((role) => {
             if (!validRoles.includes(role)) {
               throw new Error(`Invalid role: ${role}`);

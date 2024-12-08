@@ -1,7 +1,7 @@
-import { PaymentInfo } from './paymentInfo.model';
+import { PaymentInfo } from "./paymentInfo.model";
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
-import { Invoice } from './invoice.model';
+import sequelize from "../config/database.config";
+import { Invoice } from "./invoice.model";
 
 export class PaymentInfoInvoice extends Model {
   public paymentInfo_id!: number;
@@ -26,8 +26,10 @@ PaymentInfoInvoice.init(
         key: "id",
       },
     },
-  },{
+  },
+  {
     sequelize,
     tableName: "paymentInfo_invoice",
     timestamps: false,
-  })
+  }
+);

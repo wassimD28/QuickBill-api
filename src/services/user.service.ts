@@ -5,14 +5,24 @@ export class UserService implements UserServiceInterface {
   async findAll(): Promise<User[]> {
     return await User.findAll();
   }
-  findById(id: number): Promise<User | null> {
-    throw new Error("Method not implemented.");
+  async findById(id: number): Promise<User | null> {
+    return await User.findByPk(id);
   }
-  updateProfile(id: number, userData: Partial<User>): Promise<User> {
-    throw new Error("Method not implemented.");
+  async updateProfile(id: number, userData: Partial<User>): Promise<User | null> {
+    const user = await User.findByPk(id);
+    if (user) {
+      await user.update(userData);
+      return user;
+    }
+    return null;
   }
-  delete(id: number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async delete(id: number): Promise<boolean> {
+    const user = await User.findByPk(id);
+    if (user) {
+      await user.destroy();
+      return true;
+    }
+    return false;
   }
   
   

@@ -1,14 +1,11 @@
 import express from "express";
-import sequelize from "./config/database";
-import { errorHandler , notFound } from "./middleware/errorHandler.middleware";
+import sequelize from "./config/database.config";
+import { errorHandler, notFound } from "./middleware/errorHandler.middleware";
 import path from "path";
 import cors from "cors";
-// import routes
-
-// Import setupAssociations
 import setupAssociations from "./models/setupAssociations";
 import { createServer } from "http";
-
+import { RouteConfig } from "./config/routes.config";
 
 const app = express();
 const httpServer = createServer(app);
@@ -37,8 +34,13 @@ const initializeDatabase = async () => {
 // Initialize database
 initializeDatabase();
 
-// routes
+// configure all routes 
+RouteConfig.configure(app);
 
+// Add a basic root route for testing
+app.get('/', (req, res) => {
+  res.json({ message: 'API is working' });
+});
 
 // Error handling middleware
 app.use(notFound);

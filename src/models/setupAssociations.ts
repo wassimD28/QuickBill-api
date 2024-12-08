@@ -5,6 +5,7 @@ import { LineItemProduct } from "./lineItem_product.conjTab";
 import { Product } from "./product.model";
 import { PaymentInfo } from "./paymentInfo.model";
 import { PaymentInfoInvoice } from "./paymentInfo_Invoice.conjTab";
+import { RefreshToken } from "./refreshToken.model";
 import User from "./user.model";
 
 export default function setupAssociations(){
@@ -21,6 +22,10 @@ export default function setupAssociations(){
   // Define paymentInfo and Invoice many to many relationship
   PaymentInfo.belongsToMany(Invoice, { through: PaymentInfoInvoice, foreignKey: "paymentInfo_id" });
   Invoice.belongsToMany(PaymentInfo, { through: PaymentInfoInvoice, foreignKey: "invoice_id" });
+
+  // Define refreshToken and User one to many relationship
+  RefreshToken.belongsTo(User, { foreignKey: "user_id" });
+  User.hasMany(RefreshToken, { foreignKey: "user_id" });
 }
 
 

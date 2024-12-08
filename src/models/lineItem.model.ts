@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../config/database.config";
 import { Invoice } from "./invoice.model";
 
 export class LineItem extends Model {
