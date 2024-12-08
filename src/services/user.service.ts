@@ -1,31 +1,20 @@
 import User from "../models/user.model";
+import { UserServiceInterface } from "../types/interfaces/userService.interface";
 
-export class UserService {
-  static async findAll() {
-    return User.findAll();
+export class UserService implements UserServiceInterface {
+  async findAll(): Promise<User[]> {
+    return await User.findAll();
   }
-
-  static async findById(id: number) {
-    return User.findByPk(id);
+  findById(id: number): Promise<User | null> {
+    throw new Error("Method not implemented.");
   }
-  // temporary :
-  static async create(userData: {
-    name: string;
-    email: string;
-    password: string;
-  }) {
-    return User.create(userData);
+  updateProfile(id: number, userData: Partial<User>): Promise<User> {
+    throw new Error("Method not implemented.");
   }
-
-  static async update(id: number, userData: Partial<User>) {
-    const user = await User.findByPk(id);
-    if (!user) throw new Error("User not found");
-    return user.update(userData);
+  delete(id: number): Promise<boolean> {
+    throw new Error("Method not implemented.");
   }
-
-  static async delete(id: number) {
-    const user = await User.findByPk(id);
-    if (!user) throw new Error("User not found");
-    return user.destroy();
-  }
+  
+  
+  
 }

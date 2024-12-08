@@ -3,10 +3,13 @@ import sequelize from "../config/database";
 
 class User extends Model {
   public id!: number;
-  public username!: string;
+  public name!: string;
   public email!: string;
   public password!: string;
   public roles!: string[]; // Array of roles
+  public address!: string;
+  public phone!: string;
+  public country!: string;
   public createdAt!: Date;
   public updatedAt!: Date; 
 }
@@ -18,9 +21,8 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    name: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
     },
     email: {
@@ -50,11 +52,23 @@ User.init(
         },
       },
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,
     tableName: "users",
-    timestamps: true, // Adds `createdAt` and `updatedAt` automatically
+    timestamps: true,
   }
 );
 
