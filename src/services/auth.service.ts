@@ -4,6 +4,7 @@ import { AuthServiceInterface } from "../types/interfaces/authService.interface"
 import {
   ApiResponse,
   DecodedToken,
+  UserIdentity,
 } from "../types/interfaces/common.interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -99,13 +100,10 @@ export class AuthService implements AuthServiceInterface {
     }
   }
   // check if access token is valid
-  async validateToken(token: string): Promise<ApiResponse> {
+  async validateToken(token: string): Promise<DecodedToken | undefined> {
     return new Promise((resolve) => {
       if (!token) {
-        resolve({
-          success: false,
-          message: "Access token missing",
-        });
+        resolve(undefined);
         return;
       }
 
@@ -114,54 +112,19 @@ export class AuthService implements AuthServiceInterface {
         process.env.ACCESS_TOKEN_SECRET as string,
         (err: any, decoded: any) => {
           if (err) {
-            if (err instanceof jwt.TokenExpiredError) {
-              resolve({
-                success: false,
-                message: "Access token has expired",
-                error: {
-                  name: err.name,
-                  expiredAt: err.expiredAt,
-                },
-              });
-              return;
-            }
-
-            if (err instanceof jwt.JsonWebTokenError) {
-              resolve({
-                success: false,
-                message: "Invalid access token",
-                error: {
-                  name: err.name,
-                },
-              });
-              return;
-            }
-
-            // Handle other potential JWT errors
-            resolve({
-              success: false,
-              message: "Token verification failed",
-              error: {
-                name: err.name,
-                message: err.message,
-              },
-            });
+            resolve(undefined);
             return;
           }
 
           // Token is valid
-          resolve({
-            success: true,
-            message: "Token is valid",
-            data: decoded as DecodedToken,
-          });
+          resolve(decoded as DecodedToken);
         }
       );
     });
   }
   generateAccessToken(user: Partial<User>): string {
     const payload = {
-      userId: user.id,
+      user_id: user.id,
       username: user.username,
       email: user.email,
       roles: user.roles,
@@ -171,7 +134,7 @@ export class AuthService implements AuthServiceInterface {
     });
   }
   generateRefreshToken(user: Partial<User>): string {
-    const payload = { userId: user.id };
+    const payload = { user_id : user.id };
     return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string, {
       expiresIn: "7d",
     });
@@ -239,7 +202,7 @@ export class AuthService implements AuthServiceInterface {
         },
       };
       return response;
-    } catch (error : any) {
+    } catch (error: any) {
       response = {
         success: false,
         message: "An error occurred while refreshing token",
@@ -247,7 +210,7 @@ export class AuthService implements AuthServiceInterface {
           name: error.name,
           message: error.message,
         },
-      }
+      };
       return response;
     }
   }
@@ -285,10 +248,10 @@ export class AuthService implements AuthServiceInterface {
     }
   }
 
-  decodeRefreshToken(refreshToken: string): { user_id: number } {
+  decodeRefreshToken(refreshToken: string): Partial<DecodedToken> {
     return jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET as string
-    ) as { user_id: number };
+    ) as Partial<DecodedToken>;
   }
 }

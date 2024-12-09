@@ -1,8 +1,10 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.config";
+import User from "./user.model";
 
 export class Product extends Model {
   public id!: number;
+  public user_id!: string;
   public name!: string;
   public image!: string;
   public price!: number;
@@ -17,6 +19,14 @@ Product.init(
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      references: {
+        model: User,
+        key: "id",
+      },
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,

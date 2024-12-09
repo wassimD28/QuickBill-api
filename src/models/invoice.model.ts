@@ -7,8 +7,8 @@ import { Client } from "./client.model";
 export class Invoice extends Model {
   public id!: number;
   public invoiceNumber!: string;
-  public sender_id!: string;
-  public reciver_id!: string;
+  public sender_id!: number;
+  public reciver_id!: number;
   public lineItems!: LineItem[];
   public dueDate!: Date;
   public subtotal!: number;

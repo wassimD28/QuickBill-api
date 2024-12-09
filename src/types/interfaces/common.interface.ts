@@ -1,11 +1,3 @@
-declare global {
-  namespace Express {
-    interface Request {
-      auth: DecodedToken;
-    }
-  }
-}
-
 export interface ApiResponse {
   success: boolean;
   message: string;
@@ -13,8 +5,14 @@ export interface ApiResponse {
   error?: any;
 }
 
-export interface DecodedToken {
+export interface UserIdentity {
   user_id: string;
   roles: string[];
   entityReq: string;
+}
+
+export interface DecodedToken{
+  user_id: string;
+  roles?: string[];
+  username?: string;
 }

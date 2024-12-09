@@ -26,6 +26,22 @@ export default function setupAssociations(){
   // Define refreshToken and User one to many relationship
   RefreshToken.belongsTo(User, { foreignKey: "user_id" });
   User.hasMany(RefreshToken, { foreignKey: "user_id" });
+
+  // Define user and payment info one to many relationship
+  User.hasMany(PaymentInfo, { foreignKey: "user_id" });
+  PaymentInfo.belongsTo(User, { foreignKey: "user_id" });
+
+  // Define user and lineItem one to many relationship
+  User.hasMany(LineItem, { foreignKey: "user_id" });
+  LineItem.belongsTo(User, { foreignKey: "user_id" });
+
+  // Define user and client one to many relationship
+  User.hasMany(Client, { foreignKey: "user_id" });
+  Client.belongsTo(User, { foreignKey: "user_id" });
+
+  // Difine user and product one to many relationship
+  User.hasMany(Product, { foreignKey: "user_id" });
+  Product.belongsTo(User, { foreignKey: "user_id" });
 }
 
 

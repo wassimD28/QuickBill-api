@@ -1,9 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.config";
 import { Invoice } from "./invoice.model";
+import User from "./user.model";
 
 export class LineItem extends Model {
   public id!: number;
+  public user_id!: number;
   public invoice_id!: number;
   public name!: number;
   public quantity!: number;
@@ -18,6 +20,14 @@ LineItem.init(
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      references: {
+        model: User,
+        key: "id",
+      },
+      allowNull: false,
     },
     invoice_id: {
       type: DataTypes.INTEGER.UNSIGNED,
