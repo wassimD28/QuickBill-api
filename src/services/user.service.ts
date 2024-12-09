@@ -2,13 +2,16 @@ import User from "../models/user.model";
 import { UserServiceInterface } from "../types/interfaces/userService.interface";
 
 export class UserService implements UserServiceInterface {
-  async findAll(): Promise<User[]> {
-    return await User.findAll();
+  async findAll(limit: number): Promise<User[]> {
+    return await User.findAll({ limit });
   }
   async findById(id: number): Promise<User | null> {
     return await User.findByPk(id);
   }
-  async updateProfile(id: number, userData: Partial<User>): Promise<User | null> {
+  async updateProfile(
+    id: number,
+    userData: Partial<User>
+  ): Promise<User | null> {
     const user = await User.findByPk(id);
     if (user) {
       await user.update(userData);
@@ -24,7 +27,4 @@ export class UserService implements UserServiceInterface {
     }
     return false;
   }
-  
-  
-  
 }

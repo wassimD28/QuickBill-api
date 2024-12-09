@@ -1,8 +1,8 @@
 import User from "../../models/user.model";
 
 export interface UserServiceInterface {
-  // Get all users
-  findAll(): Promise<User[]>;
+  // Get all users in limit
+  findAll(limit:number): Promise<User[]>;
   // Get user by id
   findById(id: number): Promise<User | null>;
   // update user profile
