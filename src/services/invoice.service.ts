@@ -2,6 +2,14 @@ import { Invoice } from "../models/invoice.model";
 import { InvoiceServiceInterface } from "../types/interfaces/invoiceService.interface";
 
 export class InvoiceService implements InvoiceServiceInterface {
+  async deleteInvoice(invoice_id: string): Promise<boolean> {
+    const invoice = await Invoice.findByPk(invoice_id);
+    if (invoice) {
+      await invoice.destroy();
+      return true;
+    }
+    return false;
+  }
   async getAllInvoicesByUserId(user_id: string): Promise<Required<Invoice>[]> {
     return await Invoice.findAll({ where: { user_id } });
   }

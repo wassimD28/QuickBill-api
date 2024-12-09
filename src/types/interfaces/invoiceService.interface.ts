@@ -12,4 +12,6 @@ export interface InvoiceServiceInterface {
     invoiceId: string,
     invoiceData: Partial<Invoice>
   ): Promise<Invoice | null>;
+  // delete invoice
+  deleteInvoice(invoice_id: string): Promise<boolean>;
 }

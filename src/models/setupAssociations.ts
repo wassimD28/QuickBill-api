@@ -10,7 +10,7 @@ import User from "./user.model";
 
 export default function setupAssociations(){
   // Define associations
-  Invoice.belongsTo(User, { as: "sender", foreignKey: "sender_id" });
+  Invoice.belongsTo(User, { as: "user", foreignKey: "user_id" });
   Invoice.belongsTo(Client, { as: "receiver", foreignKey: "reciver_id" });
   Invoice.hasMany(LineItem, { foreignKey: "invoice_id" });
   LineItem.belongsTo(Invoice, { foreignKey: "invoice_id" });

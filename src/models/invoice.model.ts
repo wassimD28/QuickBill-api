@@ -29,7 +29,6 @@ Invoice.init(
     invoiceNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     user_id: { 
       type: DataTypes.INTEGER.UNSIGNED,
