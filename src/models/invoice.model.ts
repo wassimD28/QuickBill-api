@@ -7,7 +7,7 @@ import { Client } from "./client.model";
 export class Invoice extends Model {
   public id!: number;
   public invoiceNumber!: string;
-  public sender_id!: number;
+  public user_id!: string;
   public reciver_id!: number;
   public lineItems!: LineItem[];
   public dueDate!: Date;
@@ -31,7 +31,7 @@ Invoice.init(
       allowNull: false,
       unique: true,
     },
-    sender_id: {
+    user_id: { 
       type: DataTypes.INTEGER.UNSIGNED,
       references: {
         model: User,

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { Request, Response, NextFunction } from "express";
 import { AuthController } from "../controllers/auth.controller";
 import { AuthService } from "../services/auth.service";
 import { registerValidator } from "../validator/register.validator";
@@ -7,11 +6,8 @@ import { handleValidations } from "../middleware/handleValidations.middleware";
 import { loginValidator } from "../validator/login.validator";
 import { authenticateToken } from "../middleware/authenticateToken.middleware";
 import { accessTokenValidator } from "../validator/token.validator";
-import {setAuthorization } from "../middleware/authorize.middleware";
-import { AccessLevel, ModelType } from "../types/enums/common.enum";
 import { validateLogoutRequest } from "../middleware/validateLogoutRequest .middleware";
-
-
+import expressAsyncHandler from "express-async-handler";
 
 const authRoute = Router();
 const authService = new AuthService();
@@ -22,14 +18,14 @@ authRoute.post(
   "/register",
   registerValidator,
   handleValidations,
-  authController.register
+  expressAsyncHandler(authController.register)
 );
 
 authRoute.post(
   "/login",
   loginValidator,
   handleValidations,
-  authController.login
+  expressAsyncHandler(authController.login)
 );
 
 authRoute.post(
@@ -38,17 +34,14 @@ authRoute.post(
   accessTokenValidator,
   handleValidations,
   validateLogoutRequest,
-  authController.logout
+  expressAsyncHandler(authController.logout)
 );
 
-authRoute.get(
-  "/verify",
-  authController.verifyToken
-);
+authRoute.get("/verify", expressAsyncHandler(authController.verifyToken));
 
 authRoute.post(
   "/refresh-token",
-  authController.refreshToken
+  expressAsyncHandler(authController.refreshToken)
 );
 
 export default authRoute;

@@ -7,6 +7,7 @@ import { Client } from "../models/client.model";
 import { LineItem } from "../models/lineItem.model";
 import { PaymentInfo } from "../models/paymentInfo.model";
 import { RefreshToken } from "../models/refreshToken.model";
+import User from "../models/user.model";
 
 export const setAuthorization = (
   entity: ModelType,
@@ -27,6 +28,9 @@ export const setAuthorization = (
     let Entity: any;
 
     switch (entityName) {
+      case ModelType.USER:
+        Entity = User;
+        break;
       case ModelType.INVOICE:
         Entity = Invoice;
         break;
@@ -65,51 +69,111 @@ export const setAuthorization = (
     }
     // check if the entity belongs to the authenticated user or the authenticated user is an admin
     const authenticatedUser = req.auth;
-    switch (accessLevel) {
-      // check if the user is the entity owner
-      case AccessLevel.OWNER_ONLY:
-        if (entityExists.user_id !== authenticatedUser?.user_id) {
-          response = {
-            success: false,
-            message: "Unauthorized to access this entity",
-          };
-          res.status(403).json(response);
-          return;
-        }
-        break;
-      // check if the user is an admin
-      case AccessLevel.ADMIN_ONLY:
-        if (!authenticatedUser?.roles?.includes("ADMIN")) {
-          response = {
-            success: false,
-            message: "Unauthorized to access this entity",
-          };
-          res.status(403).json(response);
-          return;
-        }
-        break;
-      // check if the user is the entity owner or an admin
-      case AccessLevel.OWNER_OR_ADMIN:
-        if (
-          entityExists.user_id !== authenticatedUser?.user_id &&
-          !authenticatedUser?.roles?.includes("ADMIN")
-        ) {
-          response = {
-            success: false,
-            message: "Unauthorized to access this entity",
-          };
-          res.status(403).json(response);
-          return;
-        }
-        break;
-      // default case for invalid access level
-      default:
+    // check if the entity is user because User does't have user_id attribute to compare with
+    if (Entity === User) {
+      const user = entityExists;
+      if (user.id !== authenticatedUser?.user_id) {
         response = {
           success: false,
-          message: "Invalid access level",
+          message: "Unauthorized to access this entity",
         };
-        res.status(400).json(response);
+        res.status(403).json(response);
         return;
+      }
+      // set cases when user is the request entity
+      switch (accessLevel) {
+        // check if the user is the entity owner
+        case AccessLevel.OWNER_ONLY:
+          if (user.id !== authenticatedUser?.user_id) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // check if the user is an admin
+        case AccessLevel.ADMIN_ONLY:
+          if (!authenticatedUser?.roles?.includes("ADMIN")) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // check if the user is the entity owner or an admin
+        case AccessLevel.OWNER_OR_ADMIN:
+          if (
+            user.id !== authenticatedUser?.user_id &&
+            !authenticatedUser?.roles?.includes("ADMIN")
+          ) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // default case for invalid access level
+        default:
+          response = {
+            success: false,
+            message: "Invalid access level",
+          };
+          res.status(400).json(response);
+          return;
+      }
+    } else {
+      switch (accessLevel) {
+        // check if the user is the entity owner
+        case AccessLevel.OWNER_ONLY:
+          if (entityExists.user_id !== authenticatedUser?.user_id) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // check if the user is an admin
+        case AccessLevel.ADMIN_ONLY:
+          if (!authenticatedUser?.roles?.includes("ADMIN")) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // check if the user is the entity owner or an admin
+        case AccessLevel.OWNER_OR_ADMIN:
+          if (
+            entityExists.user_id !== authenticatedUser?.user_id &&
+            !authenticatedUser?.roles?.includes("ADMIN")
+          ) {
+            response = {
+              success: false,
+              message: "Unauthorized to access this entity",
+            };
+            res.status(403).json(response);
+            return;
+          }
+          break;
+        // default case for invalid access level
+        default:
+          response = {
+            success: false,
+            message: "Invalid access level",
+          };
+          res.status(400).json(response);
+          return;
+      }
     }
     // Call the next middleware or route handler
     next();

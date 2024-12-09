@@ -2,11 +2,14 @@ import { Invoice } from "../../models/invoice.model";
 
 export interface InvoiceServiceInterface {
   // get all invoices by user id
-  getAllInvoicesByUserId(userId: number): Promise<Required<Invoice>[]>;
+  getAllInvoicesByUserId(userId: string): Promise<Required<Invoice>[]>;
   // get invoice by id
-  getInvoiceById(invoiceId: number): Promise<Required<Invoice> | null>;
+  getInvoiceById(invoiceId: string): Promise<Required<Invoice> | null>;
   // create invoice
-  createInvoice(invoiceData: Required<Invoice>): boolean;
+  createInvoice(invoiceData: Required<Invoice>): Promise<Invoice>;
   // update invoice
-  updateInvoice(invoiceId: number, invoiceData: Partial<Invoice>): boolean;
+  updateInvoice(
+    invoiceId: string,
+    invoiceData: Partial<Invoice>
+  ): Promise<Invoice | null>;
 }

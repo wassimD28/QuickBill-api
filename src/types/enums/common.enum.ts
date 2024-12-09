@@ -12,4 +12,5 @@ export enum ModelType {
   PRODUCT = "PRODUCT",
   LINE_ITEM = "LINE_ITEM",
   REFRESH_TOKEN = "REFRESH_TOKEN",
+  USER = "USER",
 }
